@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { getNotes, createNote, deleteNote, updateNote } from "./api/notes";
 import NoteForm from "./components/NoteForm";
 import NoteCard from "./components/NoteCard";
@@ -9,8 +9,8 @@ export default function App() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [editId, setEditId] = useState(null);
+  const [search, setSearch] = useState("");
 
-  // Load notes from backend
   useEffect(() => {
     loadNotes();
   }, []);
@@ -19,7 +19,7 @@ export default function App() {
     try {
       const res = await getNotes();
       setNotes(res.data);
-    } catch (err) {
+    } catch {
       toast.error("Failed to load notes");
     }
   };
@@ -36,11 +36,10 @@ export default function App() {
         await createNote({ title, body });
         toast.success("Note created!");
       }
-
       setTitle("");
       setBody("");
       loadNotes();
-    } catch (err) {
+    } catch {
       toast.error("Failed to save note");
     }
   };
@@ -57,7 +56,7 @@ export default function App() {
       toast.error("Note deleted");
       if (id === editId) setEditId(null);
       loadNotes();
-    } catch (err) {
+    } catch {
       toast.error("Failed to delete note");
     }
   };
@@ -69,6 +68,16 @@ export default function App() {
     toast.info("Edit cancelled");
   };
 
+  // 🔍 Smart, memoized filtering
+  const filteredNotes = useMemo(() => {
+    const term = search.toLowerCase();
+    return notes.filter(
+      (n) =>
+        n.title.toLowerCase().includes(term) ||
+        n.body.toLowerCase().includes(term)
+    );
+  }, [search, notes]);
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
       <div className="w-full max-w-3xl">
@@ -77,7 +86,18 @@ export default function App() {
           📝 Notes App
         </h1>
 
-        {/* Note Form */}
+        {/* Search Bar */}
+        <div className="flex items-center mb-6">
+          <input
+            type="text"
+            placeholder="Search notes..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 outline-none"
+          />
+        </div>
+
+        {/* Form */}
         <NoteForm
           title={title}
           body={body}
@@ -89,13 +109,13 @@ export default function App() {
         />
 
         {/* Notes List */}
-        {notes.length === 0 ? (
+        {filteredNotes.length === 0 ? (
           <p className="text-center text-gray-500 italic">
-            No notes yet — add one above.
+            {search ? "No results match your search." : "No notes yet — add one above."}
           </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {notes.map((n) => (
+            {filteredNotes.map((n) => (
               <NoteCard
                 key={n.id}
                 note={n}
