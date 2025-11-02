@@ -15,14 +15,17 @@ export default function App() {
     loadNotes();
   }, []);
 
-  const loadNotes = async () => {
-    try {
-      const res = await getNotes();
-      setNotes(res.data);
-    } catch {
-      toast.error("Failed to load notes");
-    }
-  };
+ const loadNotes = async () => {
+  try {
+    const res = await getNotes();
+    const sorted = [...res.data].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+    setNotes(sorted);
+  } catch {
+    toast.error("Failed to load notes");
+  }
+};
 
   const handleSubmit = async () => {
     if (!title.trim()) return toast.warning("Title required");

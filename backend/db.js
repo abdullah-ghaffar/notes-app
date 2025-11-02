@@ -1,28 +1,26 @@
-// backend/db.js
-import Database from "better-sqlite3";
-import fs from "fs";
+import sqlite3 from "sqlite3";
+import { open } from "sqlite";
 import path from "path";
+import { fileURLToPath } from "url";
 
-// Make sure the data directory exists
-const dataDir = path.join(process.cwd(), "data");
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
-}
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const dbPath = path.join(__dirname, "data", "app.db");
 
-// Connect to (or create) the SQLite database file
-const dbPath = path.join(dataDir, "app.db");
-const db = new Database(dbPath);
+// open SQLite database
+const db = await open({
+  filename: dbPath,
+  driver: sqlite3.Database,
+});
 
-// Create the notes table if it doesn't exist
-db.prepare(`
+// Create table with local time timestamps
+await db.exec(`
   CREATE TABLE IF NOT EXISTS notes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     body TEXT,
-    createdAt TEXT DEFAULT CURRENT_TIMESTAMP
+    createdAt TEXT DEFAULT (datetime('now', 'localtime'))
   )
-`).run();
+`);
 
 console.log("✅ SQLite database ready at:", dbPath);
-
 export default db;
