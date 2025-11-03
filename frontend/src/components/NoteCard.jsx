@@ -1,5 +1,6 @@
 export default function NoteCard({ note, onEdit, onDelete, isEditing }) {
-  // Format the date in local time, human-readable
+  if (!note) return null; // Defensive check
+
   const date = new Date(note.createdAt);
   const formattedDate = date.toLocaleString("en-US", {
     year: "numeric",
@@ -16,24 +17,20 @@ export default function NoteCard({ note, onEdit, onDelete, isEditing }) {
         isEditing ? "ring-2 ring-yellow-400" : ""
       }`}
     >
-      {/* Title */}
-      <h3 className="text-lg font-semibold text-gray-900 leading-snug mb-2 break-words">
+      <h3 className="text-lg font-semibold text-gray-900 leading-snug mb-2 wrap-break-word">
         {note.title}
       </h3>
 
-      {/* Body */}
-      <p className="text-gray-700 mb-6 whitespace-pre-line leading-relaxed break-words">
+      <p className="text-gray-700 mb-6 whitespace-pre-line leading-relaxed wrap-break-word">
         {note.body}
       </p>
 
-      {/* Timestamp at bottom right */}
       <div className="flex justify-end mb-3">
         <span className="text-xs text-gray-500 italic">
           {formattedDate}
         </span>
       </div>
 
-      {/* Action buttons */}
       <div className="flex justify-end gap-3 pt-3 border-t border-gray-100">
         <button
           onClick={() => onEdit(note)}
