@@ -87,16 +87,3 @@ State flows in one direction: **disk → API → UI**.
 | POST   | `/api/notes`     | Create a new note       |
 | PUT    | `/api/notes/:id` | Update an existing note |
 | DELETE | `/api/notes/:id` | Remove a note           |
-
-### Example Response
-
-```json
-{
-  "id": 1,
-  "title": "Example Note",
-  "body": "Stored locally",
-  "createdAt": "2025-11-03 23:08:21"
-}
-```
-
-##
