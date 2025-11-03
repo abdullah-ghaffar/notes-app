@@ -1,13 +1,9 @@
 # Node modules
 node_modules/
 
-# Build output
-dist/
-build/
-.cache/
-.vite/
-
 # Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -19,12 +15,17 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
-# Editor / OS
+# SQLite database
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+data/*.db-journal
+
+# System files
 .DS_Store
 Thumbs.db
-*.swp
-*.swo
 
-# Misc
-.idea/
-.vscode/
+# Build artifacts
+dist/
+coverage/
+.cache/
