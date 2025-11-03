@@ -36,30 +36,6 @@ Each note records its own timeline — creation and last edit — ensuring tempo
 
 ---
 
-## Architecture
-
-```bash
-notes-app/
-├── backend/
-│   ├── db.js              # SQLite initialization
-│   ├── server.js          # Express API server
-│   ├── routes/notes.js    # CRUD routes
-│   └── data/app.db        # Local database
-├── frontend/
-│   ├── src/
-│   │   ├── App.jsx
-│   │   └── components/NoteCard.jsx
-│   ├── index.html
-│   ├── vite.config.js
-│   └── tailwind.config.js
-└── README.md
-```
-
-Each layer is independent but transparent to the one above it.
-State flows in one direction: **disk → API → UI**.
-
----
-
 ## Stack
 
 * **Frontend:** React + Vite + Tailwind CSS
