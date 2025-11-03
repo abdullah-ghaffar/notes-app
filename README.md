@@ -11,7 +11,6 @@ Designed for reliability, clarity, and speed.
 # Backend
 cd backend
 npm install
-npm install sqlite3 sqlite nodemon
 npm run dev
 
 # Frontend
