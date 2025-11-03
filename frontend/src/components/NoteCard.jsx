@@ -1,5 +1,5 @@
 export default function NoteCard({ note, onEdit, onDelete, isEditing }) {
-  if (!note) return null; // Defensive check
+  if (!note) return null;
 
   const date = new Date(note.createdAt);
   const formattedDate = date.toLocaleString("en-US", {
@@ -27,7 +27,7 @@ export default function NoteCard({ note, onEdit, onDelete, isEditing }) {
 
       <div className="flex justify-end mb-3">
         <span className="text-xs text-gray-500 italic">
-          {formattedDate}
+          Last edited: {formattedDate}
         </span>
       </div>
 
